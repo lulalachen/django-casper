@@ -54,13 +54,15 @@ class CasperTestCase(LiveServerTestCase):
             kwargs['cookie-' + cn] = self.client.cookies[cn].value
 
         cmd = ['casperjs', 'test', '--no-colors']
-        cmd.extend([('--%s=%s' % i) for i in kwargs.iteritems()])
+        cmd.extend([('--%s=%s' % i) for i in kwargs.items()])
         cmd.append(test_filename)
 
-        p = Popen(cmd, stdout=PIPE, stderr=PIPE,
-            cwd=os.path.dirname(test_filename))  # flake8: noqa
+        p = Popen(
+            cmd, stdout=PIPE, stderr=PIPE,
+            cwd=os.path.dirname(test_filename),
+        )
         out, err = p.communicate()
         if p.returncode != 0:
-            sys.stdout.write(out)
-            sys.stderr.write(err)
+            sys.stdout.write(out.decode())
+            sys.stderr.write(err.decode())
         return p.returncode == 0
