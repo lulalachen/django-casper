@@ -65,8 +65,8 @@ class CasperTestCase(LiveServerTestCase):
 
         if sys.version_info.major == 3:
             # call decode only if python 3 used
-            out = out.decode()
-            err = err.decode()
+            out = out.decode(sys.stdout.encoding)
+            err = err.decode(sys.stdout.encoding)
 
         if p.returncode != 0:
             sys.stdout.write(out)
